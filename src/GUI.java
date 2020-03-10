@@ -28,10 +28,7 @@ public class GUI extends JFrame {
     }
 
     private JPanel infixCalc(){
-        JPanel content = new JPanel(new GridLayout(3,0));
-        JPanel expressionRow = new JPanel(new GridBagLayout());
-        JPanel evaluateRow = new JPanel(new GridBagLayout());
-        JPanel resultRow = new JPanel(new GridBagLayout());
+        JPanel content = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         JLabel expressionLabel = new JLabel("Enter Infix Expression");
         JLabel resultLabel = new JLabel("Result");
@@ -45,48 +42,45 @@ public class GUI extends JFrame {
         c.gridy = 0;
         c.gridwidth = 1;
         c.insets = new Insets(5,5,5,5);
-        c.weightx=0.5;
-        expressionRow.add(expressionLabel, c);
+        c.weightx=0;
+        content.add(expressionLabel, c);
 
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
         c.gridy = 0;
-        c.gridwidth = 3;
+        c.gridwidth = 6;
         c.insets = new Insets(5,5,5,5);
         c.weightx=3;
-        expressionRow.add(expressionText, c);
+        content.add(expressionText, c);
 
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.NONE;
-        c.gridx = 0;
-        c.gridy = 0;
+        c.gridx = 2;
+        c.gridy = 1;
         c.gridwidth = 1;
         c.insets = new Insets(5,5,5,5);
-        c.weightx=0;
-        evaluateRow.add(evaluate, c);
+        c.weightx=1;
+        content.add(evaluate, c);
 
         c.anchor = GridBagConstraints.LINE_START;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
-        c.gridy = 0;
+        c.gridy = 2;
         c.gridwidth = 1;
         c.insets = new Insets(5,5,5,5);
-        c.weightx=0.5;
-        resultRow.add(resultLabel, c);
+        c.weightx=0;
+        content.add(resultLabel, c);
 
         c.anchor = GridBagConstraints.CENTER;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 1;
-        c.gridy = 0;
-        c.gridwidth = 3;
+        c.gridy = 2;
+        c.gridwidth = 6;
         c.insets = new Insets(5,5,5,5);
         c.weightx=3;
-        resultRow.add(resultText, c);
+        content.add(resultText, c);
 
-        content.add(expressionRow);
-        content.add(evaluate);
-        content.add(resultRow);
         return content;
     }
 }
