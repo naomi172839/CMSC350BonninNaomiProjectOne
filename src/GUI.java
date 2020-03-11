@@ -67,7 +67,7 @@ public class GUI {
         c.weighty=0.5;
         evaluate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                resultText.setText("Button Pressed");
+                resultText.setText(Infix.evaluate(expressionText.getText()));
             }
         });
         content.add(evaluate, c);
