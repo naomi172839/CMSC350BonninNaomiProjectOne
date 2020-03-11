@@ -43,12 +43,13 @@ public class Infix {
             } else if(token.matches("\\(")) {
                 operator.push(token);
             } else if(token.matches("\\)")){
-                while(!operand.peek().matches("\\(")) {
+                while(!operator.peek().matches("\\(")) {
                     String rightOperand = operand.pop();
                     String leftOperand = operand.pop();
                     String op = operator.pop();
                     operand.push(calculate(op,leftOperand,rightOperand));
                 }
+                operator.pop();
             } else if(token.matches("[*/+\\-]")){
                 while(!operator.isEmpty() && precidence(token,operator.peek())) {
                     String rightOperand = operand.pop();
