@@ -1,4 +1,3 @@
-import java.util.Arrays;
 import java.util.Stack;
 
 public class Infix {
@@ -95,15 +94,9 @@ public class Infix {
 
     private static boolean precidence(String operator1, String operator2) {
 
-        if(operator2.matches("[*/]")) {
+        if (operator2.matches("[*/]")) {
             return true;
-        }
-        else if(operator2.matches("[+\\-]") && operator1.matches("[+\\-]")) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        } else return operator2.matches("[+\\-]") && operator1.matches("[+\\-]");
 
     }
 }
