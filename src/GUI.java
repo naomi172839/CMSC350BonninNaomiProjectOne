@@ -67,7 +67,11 @@ public class GUI {
         c.weighty=0.5;
         evaluate.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                resultText.setText(Infix.evaluate(expressionText.getText()));
+                try {
+                    resultText.setText(Infix.evaluate(expressionText.getText()));
+                } catch (DivideByZero divideByZero) {
+                    JOptionPane.showMessageDialog(content, "You can not divide by 0");
+                }
             }
         });
         content.add(evaluate, c);

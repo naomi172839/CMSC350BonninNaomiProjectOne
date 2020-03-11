@@ -6,7 +6,7 @@ public class Infix {
     private static Stack<String> operand = new Stack();
     private static Stack<String> operator = new Stack();
 
-    public static String evaluate(String expression) {
+    public static String evaluate(String expression) throws DivideByZero {
         evaluate(tokenize(expression));
         return operand.pop();
     }
@@ -33,7 +33,7 @@ public class Infix {
         return tokenExpression;
     }
 
-    private static void evaluate(String[] array) {
+    private static void evaluate(String[] array) throws DivideByZero {
         for(String token : array) {
             if(token.equals("@")) {
                 break;
@@ -68,7 +68,7 @@ public class Infix {
         }
     }
 
-    private static String calculate(String operator, String op1, String op2) {
+    private static String calculate(String operator, String op1, String op2) throws DivideByZero {
         Integer leftOperand = Integer.parseInt(op1);
         Integer rightOperand = Integer.parseInt(op2);
         int result = 0;
@@ -79,7 +79,12 @@ public class Infix {
             result = leftOperand - rightOperand;
         }
         if(operator.matches("/")) {
-            result = leftOperand / rightOperand;
+            try {
+                result = leftOperand / rightOperand;
+            }
+            catch(ArithmeticException e) {
+                throw new DivideByZero(e.getMessage());
+            }
         }
         if (operator.matches("\\*")) {
             result = leftOperand * rightOperand;
@@ -100,5 +105,11 @@ public class Infix {
             return false;
         }
 
+    }
+}
+
+class DivideByZero extends Exception {
+    DivideByZero(String e) {
+        super(e);
     }
 }
