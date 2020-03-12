@@ -1,5 +1,8 @@
+import org.jetbrains.annotations.NotNull;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.EmptyStackException;
 
 /*
 The GUI class is responsible for creating the GUI that the user interacts with.  It has no public methods and contains
@@ -23,6 +26,7 @@ public class GUI {
   }
 
   // Method to create the actual content for the application
+  @NotNull
   private JPanel infixCalc() {
     // Creates a panel to hold the conent
     JPanel content = new JPanel(new GridBagLayout());
@@ -92,10 +96,12 @@ public class GUI {
             resultText.setText(Infix.calculate(expressionText.getText()));
           } catch (DivideByZero divideByZero) { // This is a custom checked exception
             JOptionPane.showMessageDialog(content, "You can not divide by 0");
-          } catch (EmptyExpression emptyExpression) {
+          } catch (EmptyExpression emptyExpression) { //This is another custom checked exception
             JOptionPane.showMessageDialog(content, "Please enter an expression");
-          } catch (InvalidExpression invalidExpression) {
+          } catch (InvalidExpression | EmptyStackException invalidExpression) {  //If expresion is invalid, reset prog.
             JOptionPane.showMessageDialog(content, "The entered expression is invalid");
+            Infix.resetStack();
+            resultText.setText("");
           }
         });
     content.add(evaluate, c);
