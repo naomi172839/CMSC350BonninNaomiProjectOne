@@ -16,7 +16,7 @@ public class Infix {
   // and returns
   // The final answer in the form of a string.  Throws all four exceptions.
   public static String calculate(String expression)
-      throws DivideByZero, EmptyExpression, InvalidExpression, ParenthesisMismatch {
+          throws DivideByZero, EmptyExpression, InvalidExpression, ParenthesisMismatch, NumberTooLarge {
     evaluate(tokenize(expression));
     return operand.pop();
   }
@@ -44,7 +44,7 @@ public class Infix {
     // Creates a new string builder for multi digit numbers
     StringBuilder tokenHolder = new StringBuilder();
     int arrayPosition = 0; // To track position in tokenExpression
-    int pCount=0, oCount = 0,dCount=0;
+    int pCount = 0, oCount = 0, dCount = 0;
     // Converts the expression to an array of characters and iterates through
     for (char c : expression.toCharArray()) {
       if (!Character.toString(c).matches("[*/\\-+()\\d]")) { // Checks for invalid characters
@@ -79,8 +79,8 @@ public class Infix {
     if (pCount % 2 == 1) {
       throw new ParenthesisMismatch(Integer.toString(pCount));
     }
-    if(dCount-oCount!=1) {
-      throw new InvalidExpression(Integer.toString(dCount-oCount));
+    if (dCount - oCount != 1) {
+      throw new InvalidExpression(Integer.toString(dCount - oCount));
     }
     return tokenExpression;
   }
@@ -88,7 +88,7 @@ public class Infix {
   // This method contains the actual algorithm to evaluate the infix expression.  It takes a
   // tokenized infix expression
   // in the form of the array.  Follows the algorithm provided in class.
-  private static void evaluate(@NotNull String[] array) throws DivideByZero {
+  private static void evaluate(@NotNull String[] array) throws DivideByZero, NumberTooLarge {
     for (String token : array) { // Iterates through the tokenExpression
       // Since tokenExpression may be larger than necessary, we ensure we are not checking any null
       // values
@@ -102,28 +102,19 @@ public class Infix {
         operator.push(token);
       } else if (token.matches("\\)")) { // Checks if token is a )
         while (!operator.peek().matches("\\(")) { // Evaluates the inside of the parentheses
-          String rightOperand = operand.pop();
-          String leftOperand = operand.pop();
-          String op = operator.pop();
-          operand.push(calculate(op, leftOperand, rightOperand));
+          operand.push(math(operator.pop(), operand.pop(), operand.pop()));
         }
         operator.pop(); // Removes the ( from the stack
       } else if (token.matches("[*/+\\-]")) { // Checks if token is an operator
         while (!operator.isEmpty()
             && precedence(token, operator.peek())) { // Evaluates expression, uses precedence
-          String rightOperand = operand.pop();
-          String leftOperand = operand.pop();
-          String op = operator.pop();
-          operand.push(calculate(op, leftOperand, rightOperand));
+          operand.push(math(operator.pop(), operand.pop(), operand.pop()));
         }
         operator.push(token);
       }
     }
     while (!operator.isEmpty()) { // Continues to evaluate expression while operators remain
-      String rightOperand = operand.pop();
-      String leftOperand = operand.pop();
-      String op = operator.pop();
-      operand.push(calculate(op, leftOperand, rightOperand));
+      operand.push(math(operator.pop(), operand.pop(), operand.pop()));
     }
   }
 
@@ -131,10 +122,15 @@ public class Infix {
   // It will return
   // a string containing the value of the operation
   @NotNull
-  private static String calculate(@NotNull String operator, String op1, String op2)
-      throws DivideByZero {
-    Integer leftOperand = Integer.parseInt(op1); // Converts to integer
-    Integer rightOperand = Integer.parseInt(op2); // Converts to integer
+  private static String math(@NotNull String operator, String op1, String op2)
+          throws DivideByZero, NumberTooLarge {
+    Integer rightOperand, leftOperand;
+    try{
+    rightOperand = Integer.parseInt(op1); // Converts to integer
+    leftOperand = Integer.parseInt(op2); // Converts to integer
+      } catch(NumberFormatException e) {
+      throw new NumberTooLarge(e.getMessage());
+    }
     int result = 0;
     // Addition
     if (operator.matches("\\+")) {
@@ -191,6 +187,12 @@ class InvalidExpression extends Exception {
 
 class ParenthesisMismatch extends Exception {
   ParenthesisMismatch(String e) {
+    super(e);
+  }
+}
+
+class NumberTooLarge extends Exception {
+  NumberTooLarge(String e) {
     super(e);
   }
 }

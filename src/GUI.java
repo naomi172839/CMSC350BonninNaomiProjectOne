@@ -11,7 +11,7 @@ Closing the GUI will terminate the application.
  */
 public class GUI {
 
-  static final Dimension d = new Dimension(600, 175);
+  static final Dimension d = new Dimension(600, 200);
 
   // Constructor to create and show the GUI
   public GUI() {
@@ -48,6 +48,11 @@ public class GUI {
     expressionText.setFont(f);
     expressionText.setToolTipText(
         "Please enter a valid integer infix expression. Valid symbols: +-*/()");
+    expressionText.setBorder(BorderFactory.createEmptyBorder());
+
+    JScrollPane scroll = new JScrollPane(expressionText);
+    scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
     // Creates result textfield, makes it uneditable, change font and makes transparent.
     JTextField resultText = new JTextField();
@@ -56,6 +61,7 @@ public class GUI {
     resultText.setBackground(new Color(0, 0, 0, 0));
 
     JButton evaluate = new JButton("Evaluate");
+    evaluate.setFont(f);
 
     // Sets the constraints for the expression label and adds it to the panel
     c.anchor = GridBagConstraints.LINE_END;
@@ -77,7 +83,7 @@ public class GUI {
     c.insets = new Insets(5, 5, 5, 5);
     c.weightx = 3;
     c.weighty = 1;
-    content.add(expressionText, c);
+    content.add(scroll, c);
 
     // Sets constraints for the evaluate button, creates an action listener, and adds it to the
     // panel
@@ -105,6 +111,9 @@ public class GUI {
             JOptionPane.showMessageDialog(content, "The entered expression is invalid");
             Infix.resetStack();
             resultText.setText("");
+          } catch (NumberTooLarge numberTooLarge) {
+            JOptionPane.showMessageDialog(content, "One of the numbers entered is too large");
+            Infix.resetStack();
           }
         });
     content.add(evaluate, c);
