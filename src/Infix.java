@@ -2,39 +2,48 @@ import java.util.Stack;
 
 public class Infix {
 
-  private static Stack<String> operand = new Stack();
-  private static Stack<String> operator = new Stack();
+  private static Stack<String> operand = new Stack<>();
+  private static Stack<String> operator = new Stack<>();
 
-  public static String evaluate(String expression) throws DivideByZero {
+  public static String calculate(String expression)
+      throws DivideByZero, EmptyExpression, InvalidExpression {
     evaluate(tokenize(expression));
     return operand.pop();
   }
 
-  private static String[] tokenize(String expression) {
+  private static String[] tokenize(String expression) throws EmptyExpression, InvalidExpression {
+    if (expression.isBlank()) {
+      throw new EmptyExpression("Empty Expression");
+    }
     expression = expression.replaceAll("\\s", "");
-    expression = expression + "@";
     String[] tokenExpression = new String[expression.length()];
-    String tokenHolder = "";
+    StringBuilder tokenHolder = new StringBuilder();
     int arrayPosition = 0;
     for (char c : expression.toCharArray()) {
+      if (!Character.toString(c).matches("[*/\\-+()\\d@]")) {
+        throw new InvalidExpression(expression);
+      }
       if (Character.isDigit(c)) {
-        tokenHolder = tokenHolder + c;
+        tokenHolder.append(c);
       } else {
-        if (!tokenHolder.equals("")) {
-          tokenExpression[arrayPosition] = tokenHolder;
-          tokenHolder = "";
+        if (!tokenHolder.toString().equals("")) {
+          tokenExpression[arrayPosition] = tokenHolder.toString();
+          tokenHolder = new StringBuilder();
           arrayPosition++;
         }
         tokenExpression[arrayPosition] = Character.toString(c);
         arrayPosition++;
       }
     }
+    if (!tokenHolder.toString().equals("")) {
+      tokenExpression[arrayPosition] = tokenHolder.toString();
+    }
     return tokenExpression;
   }
 
   private static void evaluate(String[] array) throws DivideByZero {
     for (String token : array) {
-      if (token.equals("@")) {
+      if (token == null) {
         break;
       }
       if (token.matches("\\d+")) {
@@ -101,6 +110,18 @@ public class Infix {
 
 class DivideByZero extends Exception {
   DivideByZero(String e) {
+    super(e);
+  }
+}
+
+class EmptyExpression extends Exception {
+  EmptyExpression(String e) {
+    super(e);
+  }
+}
+
+class InvalidExpression extends Exception {
+  InvalidExpression(String e) {
     super(e);
   }
 }
