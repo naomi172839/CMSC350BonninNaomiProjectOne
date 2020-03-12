@@ -12,78 +12,105 @@ public class Infix {
   private static Stack<String> operand = new Stack<>();
   private static Stack<String> operator = new Stack<>();
 
-  //The only method exposed to the public.  Takes the infix expression as a string for an argument and returns
-  //The final answer in the form of a string.  Throws all three exceptions.
+  // The only method exposed to the public.  Takes the infix expression as a string for an argument
+  // and returns
+  // The final answer in the form of a string.  Throws all four exceptions.
   public static String calculate(String expression)
-      throws DivideByZero, EmptyExpression, InvalidExpression {
+      throws DivideByZero, EmptyExpression, InvalidExpression, ParenthesisMismatch {
     evaluate(tokenize(expression));
     return operand.pop();
   }
+
   public static void resetStack() {
     operand = new Stack<>();
     operator = new Stack<>();
   }
 
-  //This method takes the expression as a string for an argument and returns an array containing the tokenized
-  //expression.  This method checks if the expression is empty or contains invalid characters and throws the
-  //appropriate exception.  Valid characters are: [0-9] * / + - ( )
+  // This method takes the expression as a string for an argument and returns an array containing
+  // the tokenized
+  // expression.  This method checks if the expression is empty or contains invalid characters and
+  // throws the
+  // appropriate exception.  Valid characters are: [0-9] * / + - ( )
   @NotNull
-  private static String[] tokenize(@NotNull String expression) throws EmptyExpression, InvalidExpression {
-    if (expression.isBlank()) {  //checks if expression contains anything
+  private static String[] tokenize(@NotNull String expression)
+      throws EmptyExpression, InvalidExpression, ParenthesisMismatch {
+    if (expression.isBlank()) { // checks if expression contains anything
       throw new EmptyExpression("Empty Expression");
     }
-    //Strips the whitespace from the expression.
+    // Strips the whitespace from the expression.
     expression = expression.replaceAll("\\s", "");
-    //Creates an array with size length of the expression
+    // Creates an array with size length of the expression
     String[] tokenExpression = new String[expression.length()];
-    //Creates a new string builder for multi digit numbers
+    // Creates a new string builder for multi digit numbers
     StringBuilder tokenHolder = new StringBuilder();
-    int arrayPosition = 0; //To track position in tokenExpression
-    //Converts the expression to an array of characters and iterates through
+    int arrayPosition = 0; // To track position in tokenExpression
+    int pCount=0, oCount = 0,dCount=0;
+    // Converts the expression to an array of characters and iterates through
     for (char c : expression.toCharArray()) {
-      if (!Character.toString(c).matches("[*/\\-+()\\d]")) { //Checks for invalid characters
+      if (!Character.toString(c).matches("[*/\\-+()\\d]")) { // Checks for invalid characters
         throw new InvalidExpression(expression);
       }
-      if (Character.isDigit(c)) {  //Checks if character is a digit
+      if (Character.isDigit(c)) { // Checks if character is a digit
         tokenHolder.append(c);
       } else {
-        if (!tokenHolder.toString().equals("")) { //If tokenHolder contains anything, it is added to tokenExpression
+        if (!tokenHolder
+            .toString()
+            .equals("")) { // If tokenHolder contains anything, it is added to tokenExpression
           tokenExpression[arrayPosition] = tokenHolder.toString();
-          tokenHolder = new StringBuilder();  //Resets tokenHolder to be blank
+          tokenHolder = new StringBuilder(); // Resets tokenHolder to be blank
           arrayPosition++;
+          dCount++;
         }
-        tokenExpression[arrayPosition] = Character.toString(c);  //Adds operator to tokenExpression
+        tokenExpression[arrayPosition] = Character.toString(c); // Adds operator to tokenExpression
+        if (c == '(' || c == ')') {
+          pCount++;
+        } else {
+          oCount++;
+        }
         arrayPosition++;
       }
     }
-    if (!tokenHolder.toString().equals("")) {  //Ensures that the final number gets added to tokenExpression
+    if (!tokenHolder
+        .toString()
+        .equals("")) { // Ensures that the final number gets added to tokenExpression
       tokenExpression[arrayPosition] = tokenHolder.toString();
+      dCount++;
+    }
+    if (pCount % 2 == 1) {
+      throw new ParenthesisMismatch(Integer.toString(pCount));
+    }
+    if(dCount-oCount!=1) {
+      throw new InvalidExpression(Integer.toString(dCount-oCount));
     }
     return tokenExpression;
   }
 
-  //This method contains the actual algorithm to evaluate the infix expression.  It takes a tokenized infix expression
-  //in the form of the array.  Follows the algorithm provided in class.
+  // This method contains the actual algorithm to evaluate the infix expression.  It takes a
+  // tokenized infix expression
+  // in the form of the array.  Follows the algorithm provided in class.
   private static void evaluate(@NotNull String[] array) throws DivideByZero {
-    for (String token : array) {  //Iterates through the tokenExpression
-      //Since tokenExpression may be larger than necessary, we ensure we are not checking any null values
+    for (String token : array) { // Iterates through the tokenExpression
+      // Since tokenExpression may be larger than necessary, we ensure we are not checking any null
+      // values
+      //noinspection ConstantConditions
       if (token == null) {
         break;
       }
-      if (token.matches("\\d+")) {  //Checks if token is a digit
+      if (token.matches("\\d+")) { // Checks if token is a digit
         operand.push(token);
-      } else if (token.matches("\\(")) {  //Checks if token is a (
+      } else if (token.matches("\\(")) { // Checks if token is a (
         operator.push(token);
-      } else if (token.matches("\\)")) {  //Checks if token is a )
-        while (!operator.peek().matches("\\(")) {  //Evaluates the inside of the parentheses
+      } else if (token.matches("\\)")) { // Checks if token is a )
+        while (!operator.peek().matches("\\(")) { // Evaluates the inside of the parentheses
           String rightOperand = operand.pop();
           String leftOperand = operand.pop();
           String op = operator.pop();
           operand.push(calculate(op, leftOperand, rightOperand));
         }
-        operator.pop();  //Removes the ( from the stack
-      } else if (token.matches("[*/+\\-]")) {  //Checks if token is an operator
-        while (!operator.isEmpty() && precedence(token, operator.peek())) {  //Evaluates expression, uses precedence
+        operator.pop(); // Removes the ( from the stack
+      } else if (token.matches("[*/+\\-]")) { // Checks if token is an operator
+        while (!operator.isEmpty()
+            && precedence(token, operator.peek())) { // Evaluates expression, uses precedence
           String rightOperand = operand.pop();
           String leftOperand = operand.pop();
           String op = operator.pop();
@@ -92,7 +119,7 @@ public class Infix {
         operator.push(token);
       }
     }
-    while (!operator.isEmpty()) {  //Continues to evaluate expression while operators remain
+    while (!operator.isEmpty()) { // Continues to evaluate expression while operators remain
       String rightOperand = operand.pop();
       String leftOperand = operand.pop();
       String op = operator.pop();
@@ -100,22 +127,24 @@ public class Infix {
     }
   }
 
-  //This method takes 3 Strings as an argument:An operator, a left operand, and a right operand.  It will return
-  //a string containing the value of the operation
+  // This method takes 3 Strings as an argument:An operator, a left operand, and a right operand.
+  // It will return
+  // a string containing the value of the operation
   @NotNull
-  private static String calculate(@NotNull String operator, String op1, String op2) throws DivideByZero {
-    Integer leftOperand = Integer.parseInt(op1);  //Converts to integer
-    Integer rightOperand = Integer.parseInt(op2);  //Converts to integer
+  private static String calculate(@NotNull String operator, String op1, String op2)
+      throws DivideByZero {
+    Integer leftOperand = Integer.parseInt(op1); // Converts to integer
+    Integer rightOperand = Integer.parseInt(op2); // Converts to integer
     int result = 0;
-    //Addition
+    // Addition
     if (operator.matches("\\+")) {
       result = leftOperand + rightOperand;
     }
-    //Subtraction
+    // Subtraction
     if (operator.matches("-")) {
       result = leftOperand - rightOperand;
     }
-    //Division, catches divide by 0 errors
+    // Division, catches divide by 0 errors
     if (operator.matches("/")) {
       try {
         result = leftOperand / rightOperand;
@@ -123,7 +152,7 @@ public class Infix {
         throw new DivideByZero(e.getMessage());
       }
     }
-    //Multiplication
+    // Multiplication
     if (operator.matches("\\*")) {
       result = leftOperand * rightOperand;
     }
@@ -131,8 +160,9 @@ public class Infix {
     return Integer.toString(result);
   }
 
-  //Checks operator precedence.  Takes to operators as strings as arguments.  Returns a true if the second operator is
-  //of higher precedence
+  // Checks operator precedence.  Takes to operators as strings as arguments.  Returns a true if the
+  // second operator is
+  // of higher precedence
   private static boolean precedence(String operator1, @NotNull String operator2) {
 
     if (operator2.matches("[*/]")) {
@@ -155,6 +185,12 @@ class EmptyExpression extends Exception {
 
 class InvalidExpression extends Exception {
   InvalidExpression(String e) {
+    super(e);
+  }
+}
+
+class ParenthesisMismatch extends Exception {
+  ParenthesisMismatch(String e) {
     super(e);
   }
 }

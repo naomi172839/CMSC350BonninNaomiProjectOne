@@ -94,11 +94,14 @@ public class GUI {
         e -> {
           try {
             resultText.setText(Infix.calculate(expressionText.getText()));
+            Infix.resetStack();
           } catch (DivideByZero divideByZero) { // This is a custom checked exception
             JOptionPane.showMessageDialog(content, "You can not divide by 0");
-          } catch (EmptyExpression emptyExpression) { //This is another custom checked exception
+          } catch (EmptyExpression emptyExpression) { // This is another custom checked exception
             JOptionPane.showMessageDialog(content, "Please enter an expression");
-          } catch (InvalidExpression | EmptyStackException invalidExpression) {  //If expresion is invalid, reset prog.
+          } catch (InvalidExpression
+              | EmptyStackException
+              | ParenthesisMismatch invalidExpression) { // If expresion is invalid, reset prog.
             JOptionPane.showMessageDialog(content, "The entered expression is invalid");
             Infix.resetStack();
             resultText.setText("");
