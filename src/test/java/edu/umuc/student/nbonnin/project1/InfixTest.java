@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2020.
+ * Author: Naomi Bonnin
+ * School: University of Maryland Global Campus
+ * Class: CMSC 350
+ * Assignment: Project 1
+ * Last Update: 3/16/20, 5:13 PM
+ * Description:  The goal of this project was to create a program that correctly evaluates a given infix expression and displays the result to the user.  The project makes use of stacks and uses the provided algorithm.  There are several methods of validating an infix expression included.
+ */
+
+package edu.umuc.student.nbonnin.project1;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,12 +27,15 @@ class InfixTest {
       assertEquals("5", Infix.calculate(subtraction));
       assertEquals("20", Infix.calculate(multiplication));
       assertEquals("10", Infix.calculate(division));
-    } catch (DivideByZero | EmptyExpression | InvalidExpression | ParenthesisMismatch | NumberTooLarge e) {
+    } catch (DivideByZero
+        | EmptyExpression
+        | InvalidExpression
+        | ParenthesisMismatch
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
   }
-
 
   @Test
   void correctParentheses() {
@@ -34,7 +49,11 @@ class InfixTest {
       assertEquals("36", Infix.calculate(e2));
       assertEquals("20", Infix.calculate(e3));
       assertEquals("4", Infix.calculate(e4));
-    } catch (DivideByZero | EmptyExpression | InvalidExpression | ParenthesisMismatch | NumberTooLarge e) {
+    } catch (DivideByZero
+        | EmptyExpression
+        | InvalidExpression
+        | ParenthesisMismatch
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -51,7 +70,11 @@ class InfixTest {
       assertEquals("3", Infix.calculate(e2));
       assertEquals("-8", Infix.calculate(e3));
       assertEquals("40", Infix.calculate(e4));
-    } catch (DivideByZero | EmptyExpression | InvalidExpression | ParenthesisMismatch | NumberTooLarge e) {
+    } catch (DivideByZero
+        | EmptyExpression
+        | InvalidExpression
+        | ParenthesisMismatch
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -66,7 +89,11 @@ class InfixTest {
       assertEquals("3", Infix.calculate(e1));
       assertEquals("2", Infix.calculate(e2));
       assertEquals("12", Infix.calculate(e3));
-    } catch (DivideByZero | EmptyExpression | InvalidExpression | ParenthesisMismatch | NumberTooLarge e) {
+    } catch (DivideByZero
+        | EmptyExpression
+        | InvalidExpression
+        | ParenthesisMismatch
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -81,7 +108,11 @@ class InfixTest {
       assertEquals("16", Infix.calculate(e1));
       assertEquals("2", Infix.calculate(e2));
       assertEquals("20", Infix.calculate(e3));
-    } catch (DivideByZero | EmptyExpression | InvalidExpression | ParenthesisMismatch | NumberTooLarge e) {
+    } catch (DivideByZero
+        | EmptyExpression
+        | InvalidExpression
+        | ParenthesisMismatch
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -96,7 +127,11 @@ class InfixTest {
       assertEquals("16", Infix.calculate(e1));
       assertEquals("2", Infix.calculate(e2));
       assertEquals("20", Infix.calculate(e3));
-    } catch (DivideByZero | EmptyExpression | InvalidExpression | ParenthesisMismatch | NumberTooLarge e) {
+    } catch (DivideByZero
+        | EmptyExpression
+        | InvalidExpression
+        | ParenthesisMismatch
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -111,7 +146,11 @@ class InfixTest {
     assertThrows(DivideByZero.class, () -> Infix.calculate(e3));
     try {
       Infix.calculate(e2);
-    } catch (ParenthesisMismatch | InvalidExpression | DivideByZero | EmptyExpression | NumberTooLarge e) {
+    } catch (ParenthesisMismatch
+        | InvalidExpression
+        | DivideByZero
+        | EmptyExpression
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -126,7 +165,11 @@ class InfixTest {
     assertThrows(EmptyExpression.class, () -> Infix.calculate(e3));
     try {
       Infix.calculate(e2);
-    } catch (ParenthesisMismatch | InvalidExpression | DivideByZero | EmptyExpression | NumberTooLarge e) {
+    } catch (ParenthesisMismatch
+        | InvalidExpression
+        | DivideByZero
+        | EmptyExpression
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -141,7 +184,11 @@ class InfixTest {
     assertThrows(InvalidExpression.class, () -> Infix.calculate(e3));
     try {
       Infix.calculate(e2);
-    } catch (ParenthesisMismatch | InvalidExpression | DivideByZero | EmptyExpression | NumberTooLarge e) {
+    } catch (ParenthesisMismatch
+        | InvalidExpression
+        | DivideByZero
+        | EmptyExpression
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -156,7 +203,11 @@ class InfixTest {
     assertThrows(ParenthesisMismatch.class, () -> Infix.calculate(e3));
     try {
       Infix.calculate(e2);
-    } catch (ParenthesisMismatch | InvalidExpression | DivideByZero | EmptyExpression | NumberTooLarge e) {
+    } catch (ParenthesisMismatch
+        | InvalidExpression
+        | DivideByZero
+        | EmptyExpression
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }
@@ -171,7 +222,11 @@ class InfixTest {
     assertThrows(NumberTooLarge.class, () -> Infix.calculate(e3));
     try {
       Infix.calculate(e2);
-    } catch (ParenthesisMismatch | InvalidExpression | DivideByZero | EmptyExpression | NumberTooLarge e) {
+    } catch (ParenthesisMismatch
+        | InvalidExpression
+        | DivideByZero
+        | EmptyExpression
+        | NumberTooLarge e) {
       e.printStackTrace();
       fail();
     }

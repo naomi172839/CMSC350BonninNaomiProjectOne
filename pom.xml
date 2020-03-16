@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2020.
+  ~ Author: Naomi Bonnin
+  ~ School: University of Maryland Global Campus
+  ~ Class: CMSC 350
+  ~ Assignment: Project 1
+  ~ Last Update: 3/16/20, 5:13 PM
+  ~ Description:  The goal of this project was to create a program that correctly evaluates a given infix expression
+  ~ and displays the result to the user.  The project makes use of stacks and uses the provided algorithm.
+  ~ There are several methods of validating an infix expression included.
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>edu.umuc.student.nbonnin.project1</groupId>
+    <artifactId>infixexpression</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <name>Infix Expression Evaluator</name>
+
+    <properties>
+        <maven.compiler.source>1.13</maven.compiler.source>
+        <maven.compiler.target>1.13</maven.compiler.target>
+    </properties>
+</project>
+

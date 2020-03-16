@@ -1,3 +1,15 @@
+/*
+ * Copyright (c) 2020.
+ * Author: Naomi Bonnin
+ * School: University of Maryland Global Campus
+ * Class: CMSC 350
+ * Assignment: Project 1
+ * Last Update: 3/16/20, 5:13 PM
+ * Description:  The goal of this project was to create a program that correctly evaluates a given infix expression and displays the result to the user.  The project makes use of stacks and uses the provided algorithm.  There are several methods of validating an infix expression included.
+ */
+
+package edu.umuc.student.nbonnin.project1;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Stack;
@@ -16,7 +28,7 @@ public class Infix {
   // and returns
   // The final answer in the form of a string.  Throws all four exceptions.
   public static String calculate(String expression)
-          throws DivideByZero, EmptyExpression, InvalidExpression, ParenthesisMismatch, NumberTooLarge {
+      throws DivideByZero, EmptyExpression, InvalidExpression, ParenthesisMismatch, NumberTooLarge {
     evaluate(tokenize(expression));
     return operand.pop();
   }
@@ -123,12 +135,12 @@ public class Infix {
   // a string containing the value of the operation
   @NotNull
   private static String math(@NotNull String operator, String op1, String op2)
-          throws DivideByZero, NumberTooLarge {
+      throws DivideByZero, NumberTooLarge {
     Integer rightOperand, leftOperand;
-    try{
-    rightOperand = Integer.parseInt(op1); // Converts to integer
-    leftOperand = Integer.parseInt(op2); // Converts to integer
-      } catch(NumberFormatException e) {
+    try {
+      rightOperand = Integer.parseInt(op1); // Converts to integer
+      leftOperand = Integer.parseInt(op2); // Converts to integer
+    } catch (NumberFormatException e) {
       throw new NumberTooLarge(e.getMessage());
     }
     int result = 0;
