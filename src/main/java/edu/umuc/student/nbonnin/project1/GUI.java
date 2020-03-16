@@ -4,7 +4,7 @@
  * School: University of Maryland Global Campus
  * Class: CMSC 350
  * Assignment: Project 1
- * Last Update: 3/16/20, 5:13 PM
+ * Last Update: 3/16/20, 5:49 PM
  * Description:  The goal of this project was to create a program that correctly evaluates a given infix expression and displays the result to the user.  The project makes use of stacks and uses the provided algorithm.  There are several methods of validating an infix expression included.
  */
 
@@ -23,6 +23,7 @@ Closing the GUI will terminate the application.
  */
 public class GUI {
 
+  //Default dimensions
   static final Dimension d = new Dimension(600, 200);
 
   // Constructor to create and show the GUI
@@ -62,6 +63,7 @@ public class GUI {
         "Please enter a valid integer infix expression. Valid symbols: +-*/()");
     expressionText.setBorder(BorderFactory.createEmptyBorder());
 
+    //Ensures that if the expression is too long, the text is scrollable
     JScrollPane scroll = new JScrollPane(expressionText);
     scroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
@@ -112,7 +114,6 @@ public class GUI {
         e -> {
           try {
             resultText.setText(Infix.calculate(expressionText.getText()));
-            Infix.resetStack();
           } catch (DivideByZero divideByZero) { // This is a custom checked exception
             JOptionPane.showMessageDialog(content, "You can not divide by 0");
           } catch (EmptyExpression emptyExpression) { // This is another custom checked exception
@@ -121,11 +122,9 @@ public class GUI {
               | EmptyStackException
               | ParenthesisMismatch invalidExpression) { // If expresion is invalid, reset prog.
             JOptionPane.showMessageDialog(content, "The entered expression is invalid");
-            Infix.resetStack();
             resultText.setText("");
           } catch (NumberTooLarge numberTooLarge) {
             JOptionPane.showMessageDialog(content, "One of the numbers entered is too large");
-            Infix.resetStack();
           }
         });
     content.add(evaluate, c);

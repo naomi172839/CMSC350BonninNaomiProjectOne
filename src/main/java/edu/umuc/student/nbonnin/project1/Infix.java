@@ -4,7 +4,7 @@
  * School: University of Maryland Global Campus
  * Class: CMSC 350
  * Assignment: Project 1
- * Last Update: 3/16/20, 5:13 PM
+ * Last Update: 3/16/20, 5:49 PM
  * Description:  The goal of this project was to create a program that correctly evaluates a given infix expression and displays the result to the user.  The project makes use of stacks and uses the provided algorithm.  There are several methods of validating an infix expression included.
  */
 
@@ -17,7 +17,7 @@ import java.util.Stack;
 /*
 The Infix class contains the code to actually evaluate the expression.  In addition, it also contains 3 custom
 checked exceptions: EmptyExpression, InvalidExpression, and DivideByZero.  It has 2 class variables, operand and
-operator, both of which are stacks.
+operator, both of which are stacks.  Note that there is no accounting for integer overflow.
  */
 public class Infix {
 
@@ -31,11 +31,6 @@ public class Infix {
       throws DivideByZero, EmptyExpression, InvalidExpression, ParenthesisMismatch, NumberTooLarge {
     evaluate(tokenize(expression));
     return operand.pop();
-  }
-
-  public static void resetStack() {
-    operand = new Stack<>();
-    operator = new Stack<>();
   }
 
   // This method takes the expression as a string for an argument and returns an array containing
@@ -179,31 +174,37 @@ public class Infix {
   }
 }
 
-class DivideByZero extends Exception {
+/*
+Below are all of the custom exceptions implemented.  Note that many of these could
+be combined into one exception and is better design in my opinion.  However given that
+the assignment asked for a custom exception rather than just to catch the ArithmeticException
+I elected to create more custom exceptions to really show a mastery of the concept.
+ */
+class DivideByZero extends Exception {  //For when division by 0 occurs
   DivideByZero(String e) {
-    super(e);
+    super(e); //Passes the message, allows use of Exception.getMessage()
   }
 }
 
-class EmptyExpression extends Exception {
+class EmptyExpression extends Exception { //For when nothing or only spaces is entered
   EmptyExpression(String e) {
-    super(e);
+    super(e); //Same as above, though unnecessary at the moment
   }
 }
 
-class InvalidExpression extends Exception {
+class InvalidExpression extends Exception {  //For when an expression is invalid, i.e. improper operators
   InvalidExpression(String e) {
-    super(e);
+    super(e); //Can pass on invalid character
   }
 }
 
-class ParenthesisMismatch extends Exception {
+class ParenthesisMismatch extends Exception { //For mismatched parenthesis
   ParenthesisMismatch(String e) {
     super(e);
   }
 }
 
-class NumberTooLarge extends Exception {
+class NumberTooLarge extends Exception { //For input outside int range
   NumberTooLarge(String e) {
     super(e);
   }

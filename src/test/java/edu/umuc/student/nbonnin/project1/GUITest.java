@@ -10,12 +10,20 @@
 
 package edu.umuc.student.nbonnin.project1;
 
-/*
-The driver simply contains the main method so that it is kept seperate from any logic.  Creates the GUI
- */
-public class Driver {
+import org.junit.jupiter.api.Test;
 
-  public static void main(String[] args) {
-    new GUI();
-  }
+class GUITest {
+
+    //Fails if exception thrown
+    @Test
+    void createGUI() {
+        new GUI();
+    }
+
+    //Fails if exception thrown
+    @Test
+    void createDriver() {
+        Driver.main(new String[0]);
+    }
+
 }
